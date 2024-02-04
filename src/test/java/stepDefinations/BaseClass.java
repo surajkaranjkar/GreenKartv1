@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 
-
+import pageObjects.CountryPage;
 import pageObjects.LandingPage;
 import pageObjects.OrderVerficationPage;
 
@@ -15,6 +15,6 @@ public class BaseClass {
 	 public LandingPage lp;
 	public OrderVerficationPage vp;
 	public Properties configProp;
-
+    public CountryPage cp;
 }
 	
