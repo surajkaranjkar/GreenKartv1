@@ -10,8 +10,8 @@ import io.cucumber.junit.CucumberOptions;
 		plugin={"pretty","html:test-output/report.html"}, 
 		monochrome=true,
 		glue="stepDefinations",
-		dryRun=true,
-		tags="@Smoke"
+		dryRun=false
+		
 		)
 
 public class TestRunner{
