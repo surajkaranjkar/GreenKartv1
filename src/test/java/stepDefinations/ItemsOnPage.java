@@ -84,10 +84,51 @@ public class ItemsOnPage extends BaseClass {
 	public void user_verifies_the_purchase_and_adds_and_place_order(String discount, DataTable datatable)
 			throws InterruptedException {
 		vp = new OrderVerficationPage(driver);
-		List<List<String>> cucumberData = datatable.asLists(String.class);
-		List<WebElement> rows = OrderVerficationPage.productCartTable.findElements(By.tagName("tr"));
-		List<WebElement> cells = OrderVerficationPage.productCartTableRows.findElements(By.tagName("td"));
 
+		//// Find the table element by its ID, XPath, or any other suitable selector
+		WebElement table = vp.productCartTable;
+		// Get the rows of the web table
+		List<WebElement> webTableRows = table.findElements(By.tagName("tr"));
+
+		// Convert the Cucumber DataTable into a list of lists of strings
+		List<List<String>> cucumberTableData = datatable.asLists();
+
+		// Check if the number of rows matches
+		if (webTableRows.size() != cucumberTableData.size()) {
+			System.out.println(
+					"Number of rows in Cucumber DataTable does not match the number of rows in the web table.");
+			return;
+		}
+		// Iterate through the rows of both data structures
+		for (int i = 0; i < webTableRows.size(); i++) {
+
+			WebElement webTableRow = webTableRows.get(i);
+			List<WebElement> webTableCells = webTableRow.findElements(By.tagName("td"));
+			List<String> cucumberTableRow = cucumberTableData.get(i);
+			// Skip the first cell in the web table
+			int x = cucumberTableRow.size() + 1;
+			if (webTableCells.size() != x) {
+				System.out.println("Number of columns does not match.");
+				driver.quit();
+				return;
+			}
+
+			// Compare data for the remaining cells
+			for (int j = 1; j < webTableCells.size(); j++) {
+				String webTableCellText = webTableCells.get(j).getText();
+				String cucumberTableCellText = cucumberTableRow.get(j - 1); // Adjust index since we're skipping the
+																			// first cell
+				// Compare cell data
+				if (!webTableCellText.contains(cucumberTableCellText)) {
+					System.out.println("Data does not match at Row " + (i + 1) + ", Column " + j);
+					System.out.println("Web table value: " + webTableCellText);
+					System.out.println("Cucumber table value: " + cucumberTableCellText);
+					driver.quit();
+					return;
+				}
+			}
+		}
+		System.out.println("All data matches.");
 		if (discount.contains("discount")) {
 			vp.enterPromoCode(configProp.getProperty("promocode"));// code for applying discount
 			vp.btnApply();
@@ -96,12 +137,14 @@ public class ItemsOnPage extends BaseClass {
 
 		}
 		vp.clickPlaceOrder();
+		Thread.sleep(3000);
 	}
 
-	@Then("user selects {string} with {string} tems and condition proceed")
-	public void user_selects_with_tems_and_condition_proceed(String country, String policy)
+	@Then("user selects {string} with {string} terms and condition proceed")
+	public void user_selects_with_terms_and_condition_proceed(String country, String policy)
 			throws InterruptedException {
 		cp = new CountryPage(driver);
+
 		cp.selectValueFromdown(country);
 		System.out.println("Country is selected");
 
