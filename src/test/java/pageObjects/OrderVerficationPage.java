@@ -22,9 +22,26 @@ public class OrderVerficationPage {
 	@CacheLookup
 	WebElement btnApply;
 	
-	@FindBy(xpath ="//*[@id='productCartTables']")
+	@FindBy(xpath ="//*[@id='productCartTables']//tbody")
 	@CacheLookup
-	WebElement productCartTable;
+	public static WebElement productCartTable;
+	
+	@FindBy(xpath ="//*[@id='productCartTables']//tbody//tr[1]")
+	@CacheLookup
+	public static WebElement productCartTableRows;
+	
+	@FindBy(xpath ="//input[@class='promoCode']")
+	@CacheLookup
+	WebElement txtPromoCode;
+	@FindBy(xpath = "//span[@class='promoInfo']")
+	@CacheLookup
+	WebElement lblpromoInfo;
+	
+
+	public String checkLblPromoInfo() {
+		String promocodesuccessfail=lblpromoInfo.getText();
+return promocodesuccessfail;
+	}
 	
 	public void clickPlaceOrder() {
 		btnPlcOrder.click();
@@ -34,4 +51,8 @@ public class OrderVerficationPage {
 		btnApply.click();
 	}
 	
+	public void enterPromoCode(String promocode) {
+		txtPromoCode.clear();
+		txtPromoCode.sendKeys(promocode);
+	}
 }

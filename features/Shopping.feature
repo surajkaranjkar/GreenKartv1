@@ -3,7 +3,7 @@
 Feature: Vegetables Cart
 
 @Smoke @Regression
-  Scenario: Adding Vegetables to Cart
+  Scenario Outline: Adding Vegetables to Cart
     Given User is on "shopping" page 
   When User selects the item and adds to cart
     |Item|Quantity| 
@@ -11,6 +11,15 @@ Feature: Vegetables Cart
      |Carrot |3|
      |Mango|2|
  And the user clicks on proceed to check out 
- Then user verifies the purchase and place order
-# And user selects "Australia" and proceed 
-#And user verfies "success"
+ Then user verifies the purchase and adds "<Discount>" and place order
+ |Product|Quantiry|Price|Total|
+|Cucumber|2|48|96|
+|Carrot|3|56|168|
+|Mango|2|75|150|
+And user selects "<country>" with "<policy>" tems and condition proceed 
+And user verfies "<message>"
+
+Examples:
+|country|Discount|policy|message|
+|Australia|no|yes|yes|
+|China|discount|no|no|
