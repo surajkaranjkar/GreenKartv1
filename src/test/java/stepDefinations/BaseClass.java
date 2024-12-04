@@ -10,11 +10,9 @@ import pageObjects.OrderVerficationPage;
 
 public class BaseClass {
 
-	
-	 public WebDriver driver;
-	 public LandingPage lp;
+	public WebDriver driver;
+	public LandingPage lp;
 	public OrderVerficationPage vp;
 	public Properties configProp;
-    public CountryPage cp;
+	public CountryPage cp;
 }
-	
